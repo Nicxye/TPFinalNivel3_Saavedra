@@ -3,12 +3,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="row row-cols-md-3 g-2">
+    <div class="row row-cols-1 row-cols-md-3 g-3">
         <asp:Repeater ID="repArticulo" runat="server">
             <ItemTemplate>
                 <div class="col">
-                    <div class="card" style="width: 18rem;">
-                        <img src="<%# Eval("ImagenUrl")%>" class="card-img-top" alt="<%#"Imagen de " + Eval("Nombre")%>" />
+                    <div class="card" style="width: 14rem;">
+                        <img src="<%# Eval("ImagenUrl")%>" class="card-img-top" alt="<%#"Imagen de" + Eval("Nombre") %>" 
+                            OnError="this.onerror= null;this.src='https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg';"/>
                         <div class="card-body">
                             <h5 class="card-title"><%#Eval("Nombre") %></h5>
                             <h3 class="card-title"><%#"$" + Eval("Precio") %></h3>

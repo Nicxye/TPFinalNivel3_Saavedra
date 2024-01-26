@@ -103,5 +103,23 @@ namespace Negocio
             }
             finally { datos.CloseConnection(); }
         }
+
+        public void EliminarArticulo(Articulo articulo)
+        {
+            AccesoBaseDatos datos = new AccesoBaseDatos();
+
+            try
+            {
+                datos.SetQuery("Delete from ARTICULOS where Id = @Id");
+                datos.SetParameters("@Id", articulo.Id);
+
+                datos.ExecuteAction();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     }
 }

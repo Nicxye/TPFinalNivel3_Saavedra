@@ -11,8 +11,11 @@ namespace catalogo_web
 {
     public partial class ArticuloForms : System.Web.UI.Page
     {
+
+        public bool ConfirmarEliminacion { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+
             if (!IsPostBack)
             {
                 CategoriaNegocio categoriaNegocio = new CategoriaNegocio();
@@ -33,7 +36,7 @@ namespace catalogo_web
                 {
                     ArticuloNegocio negocio = new ArticuloNegocio();
                     Articulo seleccionado = negocio.Listar(id)[0];
-                    Session.Add("pokeSeleccionado", seleccionado);
+                    Session.Add("artSeleccionado", seleccionado);
 
                     txtId.Text = id;
                     txtCodigo.Text = seleccionado.Codigo;
@@ -88,6 +91,32 @@ namespace catalogo_web
             catch (Exception ex)
             {
                 Session.Add("error", ex.Message);
+                Response.Redirect("Error.aspx");
+            }
+        }
+
+        protected void btnEliminar_Click(object sender, EventArgs e)
+        {
+            ConfirmarEliminacion = true;
+        }
+
+        protected void btnConfirmarEliminacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (chkConfirmarEliminacion.Checked)
+                {
+                    Articulo seleccionado = (Articulo)Session["artSeleccionado"];
+                    ArticuloNegocio negocio = new ArticuloNegocio();
+
+                    negocio.EliminarArticulo(seleccionado);
+                    Response.Redirect("Default.aspx", false);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
                 Response.Redirect("Error.aspx");
             }
         }

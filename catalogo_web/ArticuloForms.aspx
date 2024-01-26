@@ -50,8 +50,27 @@
     </div>
     <div class="row">
         <div class="col-6">
-            <asp:Button ID="btnGuardar" CssClass="btn btn-primary" runat="server" Text="Guardar" OnClick="btnGuardar_Click"/>
-            <a href="Default.aspx">Cancelar</a>
+            <div class="mb-3">
+                <asp:Button ID="btnGuardar" CssClass="btn btn-primary" runat="server" Text="Guardar" OnClick="btnGuardar_Click"/>
+                <a href="Default.aspx">Cancelar</a>
+            </div>
         </div>
     </div>
+    <%if (Request.QueryString["id"] != null)
+            {%>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <asp:Button ID="btnEliminar" CssClass="btn btn-danger" runat="server" Text="Eliminar" OnClick="btnEliminar_Click"/>
+                            <% if (ConfirmarEliminacion)
+                {%>
+                            <div class="mb-3">
+                                <asp:CheckBox ID="chkConfirmarEliminacion" runat="server" Text="¿Eliminar PERMANENTEMENTE? (¡Eso es mucho tiempo!)"/>
+                                <asp:Button ID="btnConfirmarEliminacion" CssClass="btn btn-outline-danger" runat="server" Text="Eliminar" OnClick="btnConfirmarEliminacion_Click"/>
+                            </div>
+                <%}%>
+                        </div>
+                    </div>
+                </div>
+            <%} %>
 </asp:Content>

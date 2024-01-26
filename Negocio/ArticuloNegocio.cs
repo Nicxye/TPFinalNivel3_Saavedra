@@ -17,9 +17,13 @@ namespace Negocio
 
             try
             {
-                datos.SetQuery("Select A.Id, Codigo, Nombre, A.Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio,\r\nC.Descripcion as Categoria,\r\nM.Descripcion as Marca\r\nfrom ARTICULOS A, CATEGORIAS C, MARCAS M\r\nwhere IdMarca = M.Id and IdCategoria = C.Id");
+                string consulta = "Select A.Id, Codigo, Nombre, A.Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio,\r\nC.Descripcion as Categoria,\r\nM.Descripcion as Marca\r\nfrom ARTICULOS A, CATEGORIAS C, MARCAS M\r\nwhere IdMarca = M.Id and IdCategoria = C.Id";
+                if (id != "")
+                    consulta += $" and A.Id = {id}";
+
+                datos.SetQuery(consulta);
                 datos.ExecuteReader();
-                
+
                 while (datos.Lector.Read())
                 {
                     Articulo articulo = new Articulo();
@@ -47,7 +51,54 @@ namespace Negocio
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+            finally { datos.CloseConnection(); }
+        }
+        public void AgregarNuevo(Articulo nuevo)
+        {
+            AccesoBaseDatos datos = new AccesoBaseDatos();
 
+            try
+            {
+                datos.SetQuery("Insert into ARTICULOS (Codigo, Nombre, Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio) values (@Codigo, @Nombre, @Descripcion, @IdMarca, @IdCategoria, @ImagenUrl, @Precio)");
+                datos.SetParameters("@Codigo", nuevo.Codigo);
+                datos.SetParameters("@Nombre", nuevo.Nombre);
+                datos.SetParameters("@Descripcion", nuevo.Descripcion);
+                datos.SetParameters("@IdMarca", nuevo.Marca.Id);
+                datos.SetParameters("@IdCategoria", nuevo.Categoria.Id);
+                datos.SetParameters("@ImagenUrl", nuevo.ImagenUrl);
+                datos.SetParameters("@Precio", nuevo.Precio);
+
+                datos.ExecuteAction();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally { datos.CloseConnection(); }
+        }
+
+        public void ModificarArticulo(Articulo articulo)
+        {
+            AccesoBaseDatos datos = new AccesoBaseDatos();
+
+            try
+            {
+                datos.SetQuery("Update ARTICULOS set Codigo = @Codigo, Nombre = @Nombre, Descripcion = @Descripcion, IdMarca = @IdMarca, IdCategoria = @IdCategoria, ImagenUrl = @ImagenUrl, Precio = @Precio where Id = @Id");
+                datos.SetParameters("@Codigo", articulo.Codigo);
+                datos.SetParameters("@Nombre", articulo.Nombre);
+                datos.SetParameters("@Descripcion", articulo.Descripcion);
+                datos.SetParameters("@IdMarca", articulo.Marca.Id);
+                datos.SetParameters("@IdCategoria", articulo.Categoria.Id);
+                datos.SetParameters("@ImagenUrl", articulo.ImagenUrl);
+                datos.SetParameters("@Precio", articulo.Precio);
+                datos.SetParameters("@Id", articulo.Id);
+
+                datos.ExecuteAction();
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
             finally { datos.CloseConnection(); }

@@ -24,5 +24,11 @@ namespace catalogo_web
 
             }
         }
+
+        protected void btnVer_Click(object sender, EventArgs e)
+        {
+            string id = ((Button)sender).CommandArgument;
+            Response.Redirect($"ArticuloForms.aspx?id={id}");
+        }
     }
 }

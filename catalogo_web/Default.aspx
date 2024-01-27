@@ -7,7 +7,7 @@
         <asp:Repeater ID="repArticulo" runat="server">
             <ItemTemplate>
                 <div class="col">
-                    <div class="card mb-4" style="width: 14rem;">
+                    <div class="card mb-4" style="width: 18rem;">
                         <img src="<%# Eval("ImagenUrl")%>" class="card-img-top" alt="<%#"Imagen de" + Eval("Nombre") %>" 
                             OnError="this.onerror= null;this.src='https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg';"/>
                         <div class="card-body">

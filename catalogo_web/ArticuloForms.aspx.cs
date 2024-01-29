@@ -45,7 +45,8 @@ namespace catalogo_web
                     txtPrecio.Text = seleccionado.Precio.ToString();
 
                     txtUrlImagen.Text = seleccionado.ImagenUrl;
-                    imgProducto.ImageUrl = txtUrlImagen.Text;
+                    imgPlace.Src = txtUrlImagen.Text;  
+                    //imgProducto.ImageUrl = txtUrlImagen.Text;
 
                     ddlCategoria.SelectedValue = seleccionado.Categoria.Id.ToString();
                     ddlMarca.SelectedValue = seleccionado.Marca.Id.ToString();
@@ -56,7 +57,8 @@ namespace catalogo_web
 
         protected void txtUrlImagen_TextChanged(object sender, EventArgs e)
         {
-            imgProducto.ImageUrl = txtUrlImagen.Text;
+            imgPlace.Src = txtUrlImagen.Text;
+            //imgProducto.ImageUrl = txtUrlImagen.Text;
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)

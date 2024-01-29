@@ -10,14 +10,15 @@ namespace Negocio
 {
     public class ArticuloNegocio
     {
-        public List<Articulo> Listar(string id = "")
+        public List<Articulo> Listar(string id = "", string consulta = "")
         {
             List<Articulo> listaArticulos = new List<Articulo>();
             AccesoBaseDatos datos = new AccesoBaseDatos();
 
             try
             {
-                string consulta = "Select A.Id, Codigo, Nombre, A.Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio,\r\nC.Descripcion as Categoria,\r\nM.Descripcion as Marca\r\nfrom ARTICULOS A, CATEGORIAS C, MARCAS M\r\nwhere IdMarca = M.Id and IdCategoria = C.Id";
+                if (consulta == "")
+                    consulta = "Select A.Id, Codigo, Nombre, A.Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio,\r\nC.Descripcion as Categoria,\r\nM.Descripcion as Marca\r\nfrom ARTICULOS A, CATEGORIAS C, MARCAS M\r\nwhere IdMarca = M.Id and IdCategoria = C.Id";
                 if (id != "")
                     consulta += $" and A.Id = {id}";
 
@@ -120,6 +121,102 @@ namespace Negocio
 
                 throw ex;
             }
+        }
+
+        public List<Articulo> Filtrar(string campo, string tipo, string filtro = "", string filtroSecundario = "")
+        {
+            List<Articulo> listaFiltrada = new List<Articulo>();
+            AccesoBaseDatos datos = new AccesoBaseDatos();
+
+            try
+            {
+                string consulta = "Select A.Id, Codigo, Nombre, A.Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio,\r\nC.Descripcion as Categoria,\r\nM.Descripcion as Marca\r\nfrom ARTICULOS A, CATEGORIAS C, MARCAS M\r\nwhere IdMarca = M.Id and IdCategoria = C.Id and ";
+                if (campo == "Artículo")
+                {
+                    switch (tipo)
+                    {
+                        case "Nombre exacto":
+                            consulta += $"Nombre = {filtro}";
+                            break;
+                        default:
+                            consulta += $"Nombre like %{filtro}%";
+                            break;
+                    }
+
+                }
+                else if (campo == "Categoría")
+                {
+                    switch (tipo)
+                    {
+                        case "Celulares":
+                            consulta += "C.Descripcion = 'Celulares'";
+                            break;
+                        case "Televisores":
+                            consulta += "C.Descripcion = 'Televisores'";
+                            break;
+                        case "Media":
+                            consulta += "C.Descripcion = 'Media'";
+                            break;
+                        case "Audio":
+                            consulta += "C.Descripcion = 'Audio'";
+                            break;
+                        default:
+                            consulta += $"C.Descripcion like '%{filtro}%'";
+                            break;
+                    }
+                }
+                else if (campo == "Marca")
+                {
+                    switch (tipo)
+                    {
+                        case "Samsung":
+                            consulta += "M.Descripcion = 'Samsung'";
+                            break;
+                        case "Apple":
+                            consulta += "M.Descripcion = 'Apple'";
+                            break;
+                        case "Sony":
+                            consulta += "M.Descripcion = 'Sony'";
+                            break;
+                        case "Huawei":
+                            consulta += "M.Descripcion = 'Huawei'";
+                            break;
+                        case "Motorola":
+                            consulta += "M.Descripcion = 'Motorola'";
+                            break;
+                        default:
+                            consulta += $"M.Descripcion like '%{filtro}%'";
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (tipo)
+                    {
+                        case "Hasta":
+                            consulta += $"Precio <= {filtro}";
+                            break;
+                        case "Más de":
+                            consulta += $"Precio > {filtro}";
+                            break;
+                        case "Entre":
+                            consulta += $"Precio > {filtro} and Precio < {filtroSecundario}";
+                            break;
+                        default:
+                            consulta += $"Precio = {filtro}";
+                            break;
+                    }
+                }
+                //listaFiltrada = Listar(consulta: consulta);
+
+                return Listar(consulta: consulta);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally { datos.CloseConnection(); }
         }
     }
 }

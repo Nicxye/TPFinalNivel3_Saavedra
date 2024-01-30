@@ -3,6 +3,7 @@ using Negocio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -18,7 +19,7 @@ namespace catalogo_web
                 try
                 {
                     CargarLista();
-
+                    txtEntre.Visible = false;
                     AgregarElementosCampo();
                     ddlCampo.DataBind();
 
@@ -31,13 +32,6 @@ namespace catalogo_web
 
             }
         }
-
-        protected void btnVer_Click(object sender, EventArgs e)
-        {
-            string id = ((Button)sender).CommandArgument;
-            Response.Redirect($"ArticuloForms.aspx?id={id}");
-        }
-
         protected void AgregarElementosCampo()
         {
             try
@@ -111,40 +105,102 @@ namespace catalogo_web
                 Response.Redirect("Error.aspx", false);
             }
         }
-        protected void ddlCampo_SelectedIndexChanged(object sender, EventArgs e)
+
+        protected void CajaEntreOnOff()
         {
-            if (string.IsNullOrEmpty(ddlCampo.Items[0].Value))
-                ddlCampo.Items.RemoveAt(0);
-            AgregarElementosTipo();
+            if (ddlTipo.SelectedValue == "Entre" && ddlCampo.SelectedValue == "Precio")
+                txtEntre.Visible = true;
+            else txtEntre.Visible = false;
         }
 
-        protected void ddlTipo_SelectedIndexChanged(object sender, EventArgs e)
+        protected void DesactivarTextoFiltro()
         {
-            if (string.IsNullOrEmpty(ddlTipo.Items[0].Value))
-                ddlTipo.Items.RemoveAt(0);
+            txtFiltro.Text = string.Empty;
+
+            if (ddlCampo.SelectedValue == "Artículo" || ddlCampo.SelectedValue == "Precio")
+            {
+                txtFiltro.Enabled = true;
+                lblFiltro.Enabled = true;
+            }
+            else
+            {
+                txtFiltro.Enabled = false;
+                lblFiltro.Enabled = false;
+            }
         }
 
+        protected void LimpiarFiltro()
+        {
+            try
+            {
+                txtFiltro.Text = string.Empty;
+                txtEntre.Text = string.Empty;
+                Session.Remove("listaFiltrada");
+                CargarLista();
+            }
+            catch (Exception ex)
+            {
+
+                Session.Add("error", ex.ToString());
+                Response.Redirect("Error.aspx");
+            }
+        }
+        protected void btnVer_Click(object sender, EventArgs e)
+        {
+            string id = ((Button)sender).CommandArgument;
+            Response.Redirect($"ArticuloForms.aspx?id={id}", false);
+        }
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             ArticuloNegocio negocio = new ArticuloNegocio();
             try
             {
+                if (Validacion.TextoVacio(txtFiltro) && (ddlCampo.SelectedValue == "Artículo" || ddlCampo.SelectedValue == "Precio"))
+                {
+                    LimpiarFiltro();
+                    return;
+                }
+
+                if (Validacion.TextoVacio(ddlCampo))
+                    return;
+
+                if (!(Validacion.SoloNumeros(txtFiltro)) && ddlCampo.SelectedValue == "Precio")
+                    return;
+
                 Session.Add("listaFiltrada", negocio.Filtrar(ddlCampo.SelectedItem.ToString(),
-                    ddlTipo.SelectedItem.ToString(), txtFiltro.Text));
+                    ddlTipo.SelectedItem.ToString(), txtFiltro.Text, txtEntre.Text));
                 repArticulo.DataSource = Session["listaFiltrada"];
                 repArticulo.DataBind();
             }
             catch (Exception ex)
             {
-                Session.Add("error", ex.Message);
+                Session.Add("error", ex.ToString());
                 Response.Redirect("Error.aspx");
             }
         }
 
         protected void btnLimpiar_Click(object sender, EventArgs e)
         {
-            Session.Remove("listaFiltrada");
-            CargarLista();
+            LimpiarFiltro();
         }
+
+        protected void ddlCampo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ddlCampo.Items[0].Value))
+                ddlCampo.Items.RemoveAt(0);
+
+            CajaEntreOnOff();
+            DesactivarTextoFiltro();
+            AgregarElementosTipo();
+        }
+
+        protected void ddlTipo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ddlTipo.Items[0].Value))
+                ddlTipo.Items.RemoveAt(0);
+
+            CajaEntreOnOff();
+        }
+
     }
 }

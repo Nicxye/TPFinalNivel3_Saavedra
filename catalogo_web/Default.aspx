@@ -10,13 +10,13 @@
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
             <div class="row">
-                <div class="col-2">
+                <div class="col-3">
                     <div class="mb-3">
                         <label>Campo</label>
                         <asp:DropDownList ID="ddlCampo" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlCampo_SelectedIndexChanged"></asp:DropDownList>
                     </div>
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                     <div class="mb-3">
                         <label>Criterio</label>
                         <asp:DropDownList ID="ddlTipo" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlTipo_SelectedIndexChanged"></asp:DropDownList>
@@ -24,14 +24,19 @@
                 </div>
                 <div class="col-3">
                     <div class="mb-3">
-                        <label>Filtro</label>
+                        <asp:Label ID="lblFiltro" runat="server">Filtro</asp:Label>
                         <asp:TextBox CssClass="form-control" ID="txtFiltro" runat="server"></asp:TextBox>
                     </div>
+                    <div>
+                        <asp:TextBox ID="txtEntre" runat="server" CssClass="form-control " CssStyle="mb-3" TextMode="Number"></asp:TextBox>
+                    </div>
                 </div>
-                <div class="col-3" style="display: flex; flex-direction: column; justify-content: flex-end;">
-                    <div class="mb-3">
-                        <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-primary" OnClick="btnBuscar_Click" />
-                        <asp:Button ID="btnLimpiar" runat="server" Text="Borrar" CssClass="btn btn-outline-primary" OnClick="btnLimpiar_Click"/>
+                <div class="row">
+                    <div class="col-3" style="display: flex; flex-direction: column; justify-content: flex-end;">
+                        <div class="mb-3">
+                            <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-primary" OnClick="btnBuscar_Click" />
+                            <asp:Button ID="btnLimpiar" runat="server" Text="Borrar" CssClass="btn btn-outline-primary" OnClick="btnLimpiar_Click" />
+                        </div>
                     </div>
                 </div>
             </div>

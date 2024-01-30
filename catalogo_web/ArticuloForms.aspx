@@ -35,6 +35,7 @@
             <div class="mb-3">
                 <label for="lblPrecio" class="form-label">Precio</label>
                 <asp:TextBox ID="txtPrecio" runat="server" CssClass="form-control" REQUIRED></asp:TextBox>
+                <asp:RegularExpressionValidator runat="server" ErrorMessage="Solo números." ControlToValidate="txtPrecio" ValidationExpression="^[0-9]+$"></asp:RegularExpressionValidator>
             </div>
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                 <ContentTemplate>
@@ -43,8 +44,6 @@
                         <asp:TextBox ID="txtUrlImagen" runat="server" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtUrlImagen_TextChanged"></asp:TextBox>
                     </div>
                     <img id="imgPlace" runat="server" src="https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg" onerror="this.onerror = null; this.src='https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg'" alt="Imagen de producto"/>
-                    <%--<asp:Image ID="imgProducto" runat="server" CssClass="img-fluid mb-3" ImageUrl="https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg"
-                        alt="imagen del producto" NullImageUrl="https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg" On/>--%>
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>

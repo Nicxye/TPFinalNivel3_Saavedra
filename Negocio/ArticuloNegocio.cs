@@ -200,7 +200,7 @@ namespace Negocio
                             consulta += $"Precio > {filtro}";
                             break;
                         case "Entre":
-                            consulta += $"Precio > {filtro} and Precio < {filtroSecundario}";
+                            consulta += $"Precio >= {filtro} and Precio <= {filtroSecundario}";
                             break;
                         default:
                             consulta += $"Precio = {filtro}";

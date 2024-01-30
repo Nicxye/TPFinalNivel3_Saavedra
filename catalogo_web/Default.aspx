@@ -31,6 +31,7 @@
                 <div class="col-3" style="display: flex; flex-direction: column; justify-content: flex-end;">
                     <div class="mb-3">
                         <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-primary" OnClick="btnBuscar_Click" />
+                        <asp:Button ID="btnLimpiar" runat="server" Text="Borrar" CssClass="btn btn-outline-primary" OnClick="btnLimpiar_Click"/>
                     </div>
                 </div>
             </div>

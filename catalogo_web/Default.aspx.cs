@@ -17,11 +17,7 @@ namespace catalogo_web
             {
                 try
                 {
-                    ArticuloNegocio articuloNegocio = new ArticuloNegocio();
-
-                    Session.Add("listaArticulos", articuloNegocio.Listar());
-                    repArticulo.DataSource = Session["listaArticulos"];
-                    repArticulo.DataBind();
+                    CargarLista();
 
                     AgregarElementosCampo();
                     ddlCampo.DataBind();
@@ -97,6 +93,24 @@ namespace catalogo_web
                 Response.Redirect("Error.aspx", false);
             }
         }
+
+        protected void CargarLista()
+        {
+            ArticuloNegocio articuloNegocio = new ArticuloNegocio();
+
+            try
+            {
+                Session.Add("listaArticulos", articuloNegocio.Listar());
+                repArticulo.DataSource = Session["listaArticulos"];
+                repArticulo.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("Error.aspx", false);
+            }
+        }
         protected void ddlCampo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(ddlCampo.Items[0].Value))
@@ -117,9 +131,7 @@ namespace catalogo_web
             {
                 Session.Add("listaFiltrada", negocio.Filtrar(ddlCampo.SelectedItem.ToString(),
                     ddlTipo.SelectedItem.ToString(), txtFiltro.Text));
-                //repArticulo.DataSource = Session["listaFiltrada"];
-                repArticulo.DataSource = negocio.Filtrar(ddlCampo.SelectedValue,
-                    ddlTipo.SelectedValue, txtFiltro.Text);
+                repArticulo.DataSource = Session["listaFiltrada"];
                 repArticulo.DataBind();
             }
             catch (Exception ex)
@@ -127,6 +139,12 @@ namespace catalogo_web
                 Session.Add("error", ex.Message);
                 Response.Redirect("Error.aspx");
             }
+        }
+
+        protected void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            Session.Remove("listaFiltrada");
+            CargarLista();
         }
     }
 }

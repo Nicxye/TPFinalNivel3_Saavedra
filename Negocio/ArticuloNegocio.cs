@@ -136,10 +136,10 @@ namespace Negocio
                     switch (tipo)
                     {
                         case "Nombre exacto":
-                            consulta += $"Nombre = {filtro}";
+                            consulta += $"Nombre = '{filtro}'";
                             break;
                         default:
-                            consulta += $"Nombre like %{filtro}%";
+                            consulta += $"Nombre like '%{filtro}%'";
                             break;
                     }
 
@@ -207,9 +207,9 @@ namespace Negocio
                             break;
                     }
                 }
-                //listaFiltrada = Listar(consulta: consulta);
+                listaFiltrada = Listar(consulta: consulta);
 
-                return Listar(consulta: consulta);
+                return listaFiltrada;
             }
             catch (Exception ex)
             {

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -22,7 +23,6 @@ namespace catalogo_web
                     txtEntre.Visible = false;
                     AgregarElementosCampo();
                     ddlCampo.DataBind();
-
                 }
                 catch (Exception ex)
                 {
@@ -87,6 +87,12 @@ namespace catalogo_web
                 Response.Redirect("Error.aspx", false);
             }
         }
+        protected void CajaEntreOnOff()
+        {
+            if (ddlTipo.SelectedValue == "Entre" && ddlCampo.SelectedValue == "Precio")
+                txtEntre.Visible = true;
+            else txtEntre.Visible = false;
+        }
 
         protected void CargarLista()
         {
@@ -104,13 +110,6 @@ namespace catalogo_web
                 Session.Add("error", ex.ToString());
                 Response.Redirect("Error.aspx", false);
             }
-        }
-
-        protected void CajaEntreOnOff()
-        {
-            if (ddlTipo.SelectedValue == "Entre" && ddlCampo.SelectedValue == "Precio")
-                txtEntre.Visible = true;
-            else txtEntre.Visible = false;
         }
 
         protected void DesactivarTextoFiltro()
@@ -148,7 +147,15 @@ namespace catalogo_web
         protected void btnVer_Click(object sender, EventArgs e)
         {
             string id = ((Button)sender).CommandArgument;
-            Response.Redirect($"ArticuloForms.aspx?id={id}", false);
+            try
+            {
+                Response.Redirect($"ArticuloForms.aspx?id={id}", false);
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("Error.aspx");
+            }
         }
         protected void btnBuscar_Click(object sender, EventArgs e)
         {

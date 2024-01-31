@@ -7,7 +7,7 @@
         <h1>Un momento, ha ocurrido un error...</h1>
         <div class="col-3">
             <div class="mb-3">
-                <asp:Label ID="lblError" runat="server" Text="Error"></asp:Label>
+                <asp:Label ID="lblError" runat="server" Text="Error desconocido. Contacte un administrador."></asp:Label>
             </div>
         </div>
     </div>

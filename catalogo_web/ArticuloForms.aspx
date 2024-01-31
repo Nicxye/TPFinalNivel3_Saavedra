@@ -17,6 +17,7 @@
             <div class="mb-3">
                 <label for="lblNombre" class="form-label">Nombre</label>
                 <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" REQUIRED></asp:TextBox>
+                <asp:RequiredFieldValidator runat="server" ErrorMessage="Requerido." ControlToValidate="txtNombre" CssClass="error"></asp:RequiredFieldValidator>
             </div>
             <div class="mb-3">
                 <label cssclass="form-label">Categoría</label>
@@ -35,7 +36,9 @@
             <div class="mb-3">
                 <label for="lblPrecio" class="form-label">Precio</label>
                 <asp:TextBox ID="txtPrecio" runat="server" CssClass="form-control" REQUIRED></asp:TextBox>
-                <asp:RegularExpressionValidator runat="server" ErrorMessage="Solo números." ControlToValidate="txtPrecio" ValidationExpression="^[0-9]+$"></asp:RegularExpressionValidator>
+                <asp:RegularExpressionValidator runat="server" ErrorMessage="Debe tener números, y solo pueden agregarse puntos o comas." ControlToValidate="txtPrecio" 
+                    ValidationExpression="^(?=(?:[^.]*\.?[^.]*$))(?=(?:[^,]*\,?[^,]*$))(?=.*[0-9])[0-9.,]*$" CssClass="error"></asp:RegularExpressionValidator>
+                <asp:RequiredFieldValidator runat="server" ErrorMessage="Requerido." ControlToValidate="txtPrecio" CssClass="error"></asp:RequiredFieldValidator>
             </div>
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                 <ContentTemplate>

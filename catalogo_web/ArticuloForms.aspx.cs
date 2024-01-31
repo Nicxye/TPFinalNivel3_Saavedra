@@ -96,7 +96,7 @@ namespace catalogo_web
             }
             catch (Exception ex)
             {
-                Session.Add("error", ex.Message);
+                Session.Add("error", ex.ToString());
                 Response.Redirect("Error.aspx");
             }
         }

@@ -9,40 +9,37 @@ using System.Web.UI.WebControls;
 
 namespace catalogo_web
 {
-    public partial class Login : System.Web.UI.Page
+    public partial class Registro : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
 
-        protected void btnLogin_Click(object sender, EventArgs e)
+        protected void btnRegistro_Click(object sender, EventArgs e)
         {
             Page.Validate();
             if (!Page.IsValid)
                 return;
 
-            Usuario usuario = new Usuario();
+            lblExito.Text = string.Empty;
+            Usuario nuevo = new Usuario();
             UsuarioNegocio negocio = new UsuarioNegocio();
 
             try
             {
-                usuario.Email = txtEmail.Text;
-                usuario.Pass = txtPass.Text;
+                nuevo.Email = txtEmail.Text;
+                nuevo.Pass = txtPass.Text;
+                negocio.AgregarNuevo(nuevo);
 
-                if (negocio.Login(usuario))
-                {
-                    Session.Add("usuario", usuario);
-                    Response.Redirect("MiPerfil.aspx", false);
-                }
-                else
-                    lblError.Text = "Usuario o contraseña incorrectos.";
+                txtEmail.Text = string.Empty;
+                lblExito.Text = "Registro exitoso.";
             }
             catch (Exception ex)
             {
 
                 Session.Add("error", ex.ToString());
-                Response.Redirect("Error.aspx", false);
+                Response.Redirect("Error.aspx");
             }
         }
     }

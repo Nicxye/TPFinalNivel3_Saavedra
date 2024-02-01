@@ -47,5 +47,45 @@ namespace Negocio
             }
             finally { datos.CloseConnection(); }
         }
+
+        public void AgregarNuevo(Usuario nuevo)
+        {
+            AccesoBaseDatos datos = new AccesoBaseDatos();
+
+            try
+            {
+                datos.SetQuery("Insert into USERS (Email, Pass) values (@email, @pass)");
+                datos.SetParameters("@email", nuevo.Email);
+                datos.SetParameters("@pass", nuevo.Pass);
+                datos.ExecuteAction();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally { datos.CloseConnection(); }
+        }
+
+        public void Modificar(Usuario usuario)
+        {
+            AccesoBaseDatos datos = new AccesoBaseDatos();
+
+            try
+            {
+                datos.SetQuery("Update USERS set Nombre = @nombre, Apellido = @apellido, urlImagenPerfil = @urlImagen where Id = @id");
+                datos.SetParameters("@nombre", usuario.Nombre);
+                datos.SetParameters("@apellido", usuario.Apellido);
+                datos.SetParameters("@urlImagen", (object)usuario.UrlImagenPerfil ?? DBNull.Value);
+                datos.SetParameters("@Id", usuario.Id);
+
+                datos.ExecuteAction();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally { datos.CloseConnection(); }
+        }
     }
 }

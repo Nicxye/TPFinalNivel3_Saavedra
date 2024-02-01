@@ -16,7 +16,7 @@
             </div>
             <div class="mb-3">
                 <label for="lblNombre" class="form-label">Nombre</label>
-                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" REQUIRED></asp:TextBox>
+                <asp:TextBox ID="txtNombre" ClientIDMode="Static" runat="server" CssClass="form-control" REQUIRED></asp:TextBox>
                 <asp:RequiredFieldValidator runat="server" ErrorMessage="Requerido." ControlToValidate="txtNombre" CssClass="error"></asp:RequiredFieldValidator>
             </div>
             <div class="mb-3">
@@ -35,10 +35,10 @@
             </div>
             <div class="mb-3">
                 <label for="lblPrecio" class="form-label">Precio</label>
-                <asp:TextBox ID="txtPrecio" runat="server" CssClass="form-control" REQUIRED></asp:TextBox>
-                <asp:RegularExpressionValidator runat="server" ErrorMessage="Debe tener números, y solo pueden agregarse puntos o comas." ControlToValidate="txtPrecio" 
+                <asp:TextBox ID="txtPrecio" ClientIDMode="Static" runat="server" CssClass="form-control" REQUIRED></asp:TextBox>
+                <asp:RegularExpressionValidator runat="server" ErrorMessage="Debe tener números, y solo pueden agregarse puntos o comas." ControlToValidate="txtprecio"
                     ValidationExpression="^(?=(?:[^.]*\.?[^.]*$))(?=(?:[^,]*\,?[^,]*$))(?=.*[0-9])[0-9.,]*$" CssClass="error"></asp:RegularExpressionValidator>
-                <asp:RequiredFieldValidator runat="server" ErrorMessage="Requerido." ControlToValidate="txtPrecio" CssClass="error"></asp:RequiredFieldValidator>
+                <asp:RequiredFieldValidator runat="server" ErrorMessage="Requerido." ControlToValidate="txtprecio" CssClass="error"></asp:RequiredFieldValidator>
             </div>
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                 <ContentTemplate>
@@ -46,7 +46,7 @@
                         <label for="lblImagen" class="form-label">Url Imagen</label>
                         <asp:TextBox ID="txtUrlImagen" runat="server" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtUrlImagen_TextChanged"></asp:TextBox>
                     </div>
-                    <img id="imgPlace" runat="server" src="https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg" onerror="this.onerror = null; this.src='https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg'" alt="Imagen de producto"/>
+                    <img id="imgPlace" runat="server" src="https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg" onerror="this.onerror = null; this.src='https://www.puntodventamx.com/wp-content/uploads/2016/11/product-placeholder.jpg'" alt="Imagen de producto" />
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
@@ -54,7 +54,7 @@
     <div class="row">
         <div class="col-6">
             <div class="mb-3">
-                <asp:Button ID="btnGuardar" CssClass="btn btn-primary" runat="server" Text="Guardar" OnClick="btnGuardar_Click" />
+                <asp:Button ID="btnGuardar" CssClass="btn btn-primary" runat="server" Text="Guardar" OnClientClick="return campoRequerido('txtNombre') && campoRequerido('txtPrecio')" OnClick="btnGuardar_Click" />
                 <a href="Default.aspx">Cancelar</a>
             </div>
         </div>
@@ -66,6 +66,7 @@
             <div class="mb-3">
                 <asp:Button ID="btnEliminar" CssClass="btn btn-danger" runat="server" Text="Eliminar" OnClick="btnEliminar_Click" />
                 <% if (ConfirmarEliminacion)
+
                     {%>
                 <div class="mb-3">
                     <asp:CheckBox ID="chkConfirmarEliminacion" runat="server" Text="¿Eliminar <b>PERMANENTEMENTE</b>? (¡Eso es mucho tiempo!)" />

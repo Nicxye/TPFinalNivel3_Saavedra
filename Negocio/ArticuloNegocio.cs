@@ -1,4 +1,5 @@
 ﻿using AccesoDatos;
+using dominio;
 using Dominio;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,7 @@ namespace Negocio
             }
             finally { datos.CloseConnection(); }
         }
+
 
         public void ModificarArticulo(Articulo articulo)
         {
@@ -210,6 +212,90 @@ namespace Negocio
                 listaFiltrada = Listar(consulta: consulta);
 
                 return listaFiltrada;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally { datos.CloseConnection(); }
+        }
+        public void AgregarFavorito(Articulo articulo, Usuario usuario)
+        {
+            AccesoBaseDatos datos = new AccesoBaseDatos();
+
+            try
+            {
+                datos.SetQuery("Insert into FAVORITOS (IdArticulo, IdUser) values (@IdArticulo, @IdUser)");
+                datos.SetParameters("@IdArticulo", articulo.Id);
+                datos.SetParameters("@IdUser", usuario.Id);
+
+                datos.ExecuteAction();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally { datos.CloseConnection(); }
+        }
+
+        public List<Articulo> ListarFavoritos(Usuario usuario)
+        {
+            AccesoBaseDatos datos = new AccesoBaseDatos();
+            List<Articulo> listaFavoritos = new List<Articulo>();
+
+            try
+            {
+                datos.SetQuery("Select Id, IdArticulo, IdUser from FAVORITOS where IdUser = @Id");
+                datos.SetParameters("@Id", usuario.Id);
+
+                datos.ExecuteAction();
+
+                while (datos.Lector.Read())
+                {
+                    Articulo articulo = new Articulo();
+                    articulo.Id = (int)datos.Lector["Id"];
+                    articulo.Nombre = (string)datos.Lector["Nombre"];
+                    articulo.Descripcion = (string)datos.Lector["Descripcion"];
+                    articulo.Precio = Math.Round((decimal)datos.Lector["Precio"], 3);
+
+                    articulo.Marca = new Marca();
+                    articulo.Marca.Id = (int)datos.Lector["IdMarca"];
+                    articulo.Marca.Descripcion = (string)datos.Lector["Marca"];
+
+                    articulo.Categoria = new Categoria();
+                    articulo.Categoria.Id = (int)datos.Lector["IdCategoria"];
+                    articulo.Categoria.Descripcion = (string)datos.Lector["Categoria"];
+
+                    if (!(datos.Lector["ImagenUrl"] is DBNull))
+                        articulo.ImagenUrl = (string)datos.Lector["ImagenUrl"];
+
+                    listaFavoritos.Add(articulo);
+
+                }
+
+                return listaFavoritos;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally { datos.CloseConnection(); }
+        }
+
+        public void EliminarFavorito(Articulo articulo, Usuario usuario)
+        {
+            AccesoBaseDatos datos = new AccesoBaseDatos();
+
+            try
+            {
+                datos.SetQuery("Delete from FAVORITOS where IdArticulo = @IdArticulo and IdUser = @IdUser");
+                datos.SetParameters("@IdArticulo", articulo.Id);
+                datos.SetParameters("@IdUser", usuario.Id);
+
+                datos.ExecuteAction();
             }
             catch (Exception ex)
             {

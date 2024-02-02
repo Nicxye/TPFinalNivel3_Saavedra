@@ -26,8 +26,8 @@ namespace catalogo_web
                 }
                 catch (Exception ex)
                 {
-                    Session.Add("error", ex.Message);
-                    Response.Redirect("Error.aspx");
+                    Session.Add("error", ex.ToString());
+                    Response.Redirect("Error.aspx", false);
                 }
 
             }
@@ -144,19 +144,6 @@ namespace catalogo_web
                 Response.Redirect("Error.aspx");
             }
         }
-        protected void btnVer_Click(object sender, EventArgs e)
-        {
-            string id = ((Button)sender).CommandArgument;
-            try
-            {
-                Response.Redirect($"ArticuloForms.aspx?id={id}", false);
-            }
-            catch (Exception ex)
-            {
-                Session.Add("error", ex.ToString());
-                Response.Redirect("Error.aspx");
-            }
-        }
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             ArticuloNegocio negocio = new ArticuloNegocio();
@@ -185,7 +172,38 @@ namespace catalogo_web
                 Response.Redirect("Error.aspx");
             }
         }
+        protected void btnFavorito_Click(object sender, EventArgs e)
+        {
+            ArticuloNegocio negocio = new ArticuloNegocio();
+            Usuario usuario = (Usuario)Session["usuario"];
+            Articulo articulo = new Articulo();
+            articulo.Id = int.Parse(((Button)sender).CommandArgument);
 
+            try
+            {
+                negocio.AgregarFavorito(articulo, usuario);
+            }
+            catch (Exception ex)
+            {
+
+                Session.Add("error", ex.ToString());
+                Response.Redirect("Error.aspx", false);
+            }
+        }
+
+        protected void btnVer_Click(object sender, EventArgs e)
+        {
+            string id = ((Button)sender).CommandArgument;
+            try
+            {
+                Response.Redirect($"ArticuloForms.aspx?id={id}", false);
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("Error.aspx");
+            }
+        }
         protected void btnLimpiar_Click(object sender, EventArgs e)
         {
             LimpiarFiltro();

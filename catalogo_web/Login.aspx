@@ -28,7 +28,6 @@
         <div class="col-3">
             <div class="mb-3">
                 <asp:Button ID="btnLogin" runat="server" CssClass="btn btn-primary" Text="Ingresar" OnClientClick="return campoRequerido('txtEmail') && campoRequerido('txtPass')" OnClick="btnLogin_Click" />
-                <a href="Default.aspx">Cancelar</a>
             </div>
         </div>
     </div>

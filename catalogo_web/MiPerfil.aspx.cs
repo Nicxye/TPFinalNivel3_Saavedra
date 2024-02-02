@@ -1,4 +1,5 @@
-﻿using Dominio;
+﻿using Accesorio;
+using Dominio;
 using Negocio;
 using System;
 using System.Collections.Generic;
@@ -15,18 +16,18 @@ namespace catalogo_web
         {
             if (!IsPostBack)
             {
-                //if (Request.QueryString["id"] != null)
-                //{
-                Usuario usuario = (Usuario)Session["usuario"];
-                txtNombre.Text = usuario.Nombre;
-                txtApellido.Text = usuario.Apellido;
+                if (Seguridad.SesionActiva(Session["usuario"]))
+                {
+                    Usuario usuario = (Usuario)Session["usuario"];
+                    txtNombre.Text = usuario.Nombre;
+                    txtApellido.Text = usuario.Apellido;
 
-                txtEmail.ReadOnly = true;
-                txtEmail.Text = usuario.Email;
+                    txtEmail.ReadOnly = true;
+                    txtEmail.Text = usuario.Email;
 
-                if (!(string.IsNullOrEmpty(usuario.UrlImagenPerfil)))
-                    imgNuevoPerfil.ImageUrl = $"~/Images/Profile/{usuario.UrlImagenPerfil}";
-                //}
+                    if (!(string.IsNullOrEmpty(usuario.UrlImagenPerfil)))
+                        imgNuevoPerfil.ImageUrl = $"~/Images/Profile/{usuario.UrlImagenPerfil}";
+                }
             }
         }
 

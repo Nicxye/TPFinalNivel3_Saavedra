@@ -53,7 +53,7 @@
                                     <h3 class="card-title"><%#"$" + Eval("Precio") %></h3>
                                     <p class="card-text"><%# Eval("Descripcion") %></p>
                                     <asp:Button ID="btnVer" CssClass="btn btn-primary" runat="server" Text="Detalles" CommandArgument='<%#Eval("Id")%>' OnClick="btnVer_Click" />
-                                    <asp:Button ID="btnFavorito" CssClass="btn btn-danger" runat="server" Text="♥" />
+                                    <asp:Button ID="btnFavorito" CssClass="btn btn-danger" runat="server" Text="❤" CommandArgument='<%#Eval("Id") %>' OnClick="btnFavorito_Click"/>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><%#Eval ("Categoria") %></li>

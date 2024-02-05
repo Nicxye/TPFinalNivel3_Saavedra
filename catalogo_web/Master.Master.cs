@@ -13,7 +13,7 @@ namespace catalogo_web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!(Page is Login || Page is Registro || Page is Error))
+            if (!(Page is Default || Page is Login || Page is Registro || Page is Error))
             {
                 if (!(Seguridad.SesionActiva(Session["usuario"])))
                     Response.Redirect("Login.aspx", false);

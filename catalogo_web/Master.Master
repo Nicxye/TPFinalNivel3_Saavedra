@@ -25,6 +25,7 @@
                         <a class="nav-link active" aria-current="page" href="Default.aspx">Inicio</a>
                         <%if (Accesorio.Seguridad.SesionActiva(Session["usuario"]))
                             {%>
+                        <a class="nav-link" aria-current="page" href="ListaArticulos.aspx">Lista artículos</a>
                         <a class="nav-link" aria-current="page" href="ArticuloForms.aspx">Agregar artículo</a>
                         <a class="nav-link" aria-current="page" href="Favoritos.aspx">Favoritos</a>
                         <a class="nav-link" aria-current="page" href="MiPerfil.aspx">Mi perfil</a>

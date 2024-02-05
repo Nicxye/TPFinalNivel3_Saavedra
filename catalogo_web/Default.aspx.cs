@@ -1,4 +1,5 @@
-﻿using Dominio;
+﻿using Accesorio;
+using Dominio;
 using Negocio;
 using System;
 using System.Collections.Generic;
@@ -174,23 +175,26 @@ namespace catalogo_web
         }
         protected void btnFavorito_Click(object sender, EventArgs e)
         {
-            ArticuloNegocio negocio = new ArticuloNegocio();
-            Usuario usuario = (Usuario)Session["usuario"];
-            Articulo articulo = new Articulo();
-            articulo.Id = int.Parse(((Button)sender).CommandArgument);
-
-            try
+            if (Seguridad.SesionActiva(Session["usuario"]))
             {
-                if (Validacion.ExisteFavorito(usuario, articulo))
-                    return;
-                negocio.AgregarFavorito(articulo, usuario);
-                Response.Redirect("Favoritos.aspx", false);
-            }
-            catch (Exception ex)
-            {
+                ArticuloNegocio negocio = new ArticuloNegocio();
+                Usuario usuario = (Usuario)Session["usuario"];
+                Articulo articulo = new Articulo();
+                articulo.Id = int.Parse(((Button)sender).CommandArgument);
 
-                Session.Add("error", ex.ToString());
-                Response.Redirect("Error.aspx", false);
+                try
+                {
+                    if (Validacion.ExisteFavorito(usuario, articulo))
+                        return;
+                    negocio.AgregarFavorito(articulo, usuario);
+                    Response.Redirect("Favoritos.aspx", false);
+                }
+                catch (Exception ex)
+                {
+
+                    Session.Add("error", ex.ToString());
+                    Response.Redirect("Error.aspx", false);
+                }
             }
         }
 

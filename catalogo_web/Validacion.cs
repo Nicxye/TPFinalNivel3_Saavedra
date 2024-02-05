@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccesoDatos;
+using Dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,6 +33,33 @@ namespace catalogo_web
             {
                 resultado = double.TryParse(texto.Text, out _);
             }
+
+            return resultado;
+        }
+
+        public static bool ExisteFavorito(Usuario usuario, Articulo articulo)
+        {
+            AccesoBaseDatos datos = new AccesoBaseDatos();
+            bool resultado = false;
+
+            try
+            {
+                datos.SetQuery("Select F.Id, F.IdArticulo, F.IdUser, A.Id, A.Nombre, A.Descripcion from FAVORITOS F INNER JOIN ARTICULOS A ON F.IdArticulo = A.Id where F.IdUser = @IdUser and F.IdArticulo = @IdArticulo");
+                datos.SetParameters("@IdUser", usuario.Id);
+                datos.SetParameters("@IdArticulo", articulo.Id);
+
+                datos.ExecuteReader();
+
+                if (datos.Lector.HasRows)
+                    resultado = true;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally { datos.CloseConnection(); }
 
             return resultado;
         }

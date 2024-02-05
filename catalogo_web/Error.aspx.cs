@@ -13,6 +13,8 @@ namespace catalogo_web
         {
             if (Session["error"] != null)
                 lblError.Text = Session["error"].ToString();
+            else
+                lblError.Text = "Error desconocido. Contacte un administrador.";
         }
     }
 }

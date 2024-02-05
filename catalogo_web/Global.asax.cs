@@ -14,14 +14,14 @@ namespace catalogo_web
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            Exception exc = Server.GetLastError();
+            //Exception exc = Server.GetLastError();
 
-            if (exc is HttpUnhandledException)
-            {
-                Session.Add("error", exc.ToString());
-                Server.Transfer("Error.aspx");
+            //if (exc is HttpUnhandledException)
+            //{
+            //    Session.Add("error", exc.ToString());
+            //    Server.Transfer("Error.aspx");
 
-            }
+            //}
             string JQueryVer = "1.11.3"; ScriptManager.ScriptResourceMapping.AddDefinition("jquery", new ScriptResourceDefinition { Path = "~/js/jquery-" + JQueryVer + ".min.js", DebugPath = "~/js/jquery-" + JQueryVer + ".js", CdnPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-" + JQueryVer + ".min.js", CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-" + JQueryVer + ".js", CdnSupportsSecureConnection = true, LoadSuccessExpression = "window.jQuery" });
         }
 
@@ -42,7 +42,14 @@ namespace catalogo_web
 
         protected void Application_Error(object sender, EventArgs e)
         {
+            Exception exc = Server.GetLastError();
 
+            if (exc is HttpUnhandledException)
+            {
+                Session.Add("error", exc.ToString());
+                Server.Transfer("Error.aspx", true);
+
+            }
         }
 
         protected void Session_End(object sender, EventArgs e)

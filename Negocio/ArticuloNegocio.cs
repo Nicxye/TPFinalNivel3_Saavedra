@@ -1,5 +1,4 @@
 ﻿using AccesoDatos;
-using dominio;
 using Dominio;
 using System;
 using System.Collections.Generic;
@@ -247,31 +246,39 @@ namespace Negocio
 
             try
             {
-                datos.SetQuery("Select Id, IdArticulo, IdUser from FAVORITOS where IdUser = @Id");
+                datos.SetQuery("SELECT F.Id, F.IdArticulo, F.IdUser, A.Nombre, A.Descripcion, A.Precio, M.Id AS IdMarca, M.Descripcion AS Marca, C.Id AS IdCategoria, C.Descripcion AS Categoria, A.ImagenUrl " +
+                    "\r\nFROM FAVORITOS F \r\nINNER JOIN ARTICULOS A ON F.IdArticulo = A.Id " +
+                    "\r\nINNER JOIN MARCAS M ON A.IdMarca = M.Id " +
+                    "\r\nINNER JOIN CATEGORIAS C ON A.IdCategoria = C.Id " +
+                    "\r\nWHERE F.IdUser = @Id");
                 datos.SetParameters("@Id", usuario.Id);
 
-                datos.ExecuteAction();
+                datos.ExecuteReader();
 
-                while (datos.Lector.Read())
+                if (datos.Lector != null)
                 {
-                    Articulo articulo = new Articulo();
-                    articulo.Id = (int)datos.Lector["Id"];
-                    articulo.Nombre = (string)datos.Lector["Nombre"];
-                    articulo.Descripcion = (string)datos.Lector["Descripcion"];
-                    articulo.Precio = Math.Round((decimal)datos.Lector["Precio"], 3);
+                    while (datos.Lector.Read())
+                    {
+                        Articulo articulo = new Articulo();
+                        articulo.Id = (int)datos.Lector["IdArticulo"];
+                        articulo.Nombre = (string)datos.Lector["Nombre"];
+                        articulo.Descripcion = (string)datos.Lector["Descripcion"];
+                        articulo.Precio = Math.Round((decimal)datos.Lector["Precio"], 3);
 
-                    articulo.Marca = new Marca();
-                    articulo.Marca.Id = (int)datos.Lector["IdMarca"];
-                    articulo.Marca.Descripcion = (string)datos.Lector["Marca"];
+                        articulo.Marca = new Marca();
+                        articulo.Marca.Id = (int)datos.Lector["IdMarca"];
+                        articulo.Marca.Descripcion = (string)datos.Lector["Marca"];
 
-                    articulo.Categoria = new Categoria();
-                    articulo.Categoria.Id = (int)datos.Lector["IdCategoria"];
-                    articulo.Categoria.Descripcion = (string)datos.Lector["Categoria"];
+                        articulo.Categoria = new Categoria();
+                        articulo.Categoria.Id = (int)datos.Lector["IdCategoria"];
+                        articulo.Categoria.Descripcion = (string)datos.Lector["Categoria"];
 
-                    if (!(datos.Lector["ImagenUrl"] is DBNull))
-                        articulo.ImagenUrl = (string)datos.Lector["ImagenUrl"];
+                        if (!(datos.Lector["ImagenUrl"] is DBNull))
+                            articulo.ImagenUrl = (string)datos.Lector["ImagenUrl"];
 
-                    listaFavoritos.Add(articulo);
+                        listaFavoritos.Add(articulo);
+
+                    }
 
                 }
 

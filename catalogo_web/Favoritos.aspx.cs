@@ -1,5 +1,4 @@
 ﻿using Accesorio;
-using dominio;
 using Dominio;
 using Negocio;
 using System;
@@ -24,8 +23,8 @@ namespace catalogo_web
                     try
                     {
                         Session.Add("listaFavoritos", negocio.ListarFavoritos(usuario));
-                        repArticulo.DataSource = Session["listaFavoritos"];
-                        repArticulo.DataBind();
+                        CargarFavoritos();
+
                     }
                     catch (Exception ex)
                     {
@@ -34,6 +33,24 @@ namespace catalogo_web
                         Response.Redirect("Error.aspx", false);
                     }
                 }
+            }
+        }
+
+        protected void CargarFavoritos()
+        {
+            try
+            {
+                repArticulo.DataSource = Session["listaFavoritos"];
+                repArticulo.DataBind();
+
+                if (repArticulo.Items.Count == 0)
+                    lblFavoritos.Text = "No tienes favoritos.";
+            }
+            catch (Exception ex)
+            {
+
+                Session.Add("error", ex.ToString());
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -47,6 +64,8 @@ namespace catalogo_web
             try
             {
                 negocio.EliminarFavorito(articulo, usuario);
+                Session["listaFavoritos"] = negocio.ListarFavoritos(usuario);
+                CargarFavoritos();
             }
             catch (Exception ex)
             {

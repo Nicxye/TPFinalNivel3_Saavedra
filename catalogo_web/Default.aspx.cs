@@ -181,7 +181,10 @@ namespace catalogo_web
 
             try
             {
+                if (Validacion.ExisteFavorito(usuario, articulo))
+                    return;
                 negocio.AgregarFavorito(articulo, usuario);
+                Response.Redirect("Favoritos.aspx", false);
             }
             catch (Exception ex)
             {

@@ -145,21 +145,32 @@ namespace catalogo_web
                 Response.Redirect("Error.aspx");
             }
         }
+
+        protected bool ValidarCampos()
+        {
+            if (Validacion.TextoVacio(txtFiltro) && (ddlCampo.SelectedValue == "Artículo" || ddlCampo.SelectedValue == "Precio"))
+            {
+                LimpiarFiltro();
+                return true;
+            }
+
+            if (ddlCampo.SelectedValue == "Precio" && (Validacion.TextoVacio(txtFiltro) || Validacion.TextoVacio(txtEntre)))
+                return true;
+
+            if (Validacion.TextoVacio(ddlCampo))
+                return true;
+
+            if (!(Validacion.SoloNumeros(txtFiltro)) && ddlCampo.SelectedValue == "Precio")
+                return true;
+
+            return false;
+        }
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             ArticuloNegocio negocio = new ArticuloNegocio();
             try
             {
-                if (Validacion.TextoVacio(txtFiltro) && (ddlCampo.SelectedValue == "Artículo" || ddlCampo.SelectedValue == "Precio"))
-                {
-                    LimpiarFiltro();
-                    return;
-                }
-
-                if (Validacion.TextoVacio(ddlCampo))
-                    return;
-
-                if (!(Validacion.SoloNumeros(txtFiltro)) && ddlCampo.SelectedValue == "Precio")
+                if (ValidarCampos())
                     return;
 
                 Session.Add("listaFiltrada", negocio.Filtrar(ddlCampo.SelectedItem.ToString(),

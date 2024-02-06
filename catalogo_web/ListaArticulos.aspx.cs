@@ -24,5 +24,12 @@ namespace catalogo_web
                 dgvArticulos.DataBind();
             }
         }
+
+        protected void dgvArticulos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvArticulos.DataSource = Session["listaArticulos"];
+            dgvArticulos.PageIndex = e.NewPageIndex;
+            dgvArticulos.DataBind();
+        }
     }
 }
